@@ -19,10 +19,10 @@ function limpar(){
 
 $("#divJquery").css("background", "#000")
 $("#divJquery").css("color", "white")
-$("#divJquery").html("SIX SEVEN <hr> Meia SEVEN")
+$("#divJquery").html("AAAA <hr> AAAAAAAAA")
 
 
-$("#butao").on("click", function(){
+$("#botao").on("click", function(){
     $("#divJquery").toggle(2000, mostrarMensagem)
 })
 
