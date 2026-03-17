@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="my_div">
+       OI
+    </div>  
+    <script>
+
+        var my_div = document.getElementById("my_div");
+        my_div.style.color = "red";
+        my_div.width = "50%";
+        my_div.style.background = "yellow";
+        my_div.innerHTML += " <strong>people</strong> ";
+
+    </script>  
+    <hr>
+    <input type="text" placeholder="Nome do produto:" id="txtNome"/>
+
+    <button onclick="add()"> Add </button>
+
+    <h1>Lista de produtos</h1>
+
+    <div id="div_produtos">
+
+    </div>
+
+    <script>
+        function add(){
+           var div_produtos = document.getElementById("div_produtos");
+           var nome = document.getElementById("txtNome").value;
+           if(nome != ""){
+             div_produtos.innerHTML += nome + "<br>";
+           };    
+        };
+    </script>
+</body>
+</html>
