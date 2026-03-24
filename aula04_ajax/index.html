@@ -1,0 +1,34 @@
+<!--  Construindo uma função com AJAX que busca no servidor o
+nome e e-mail, apresentando estes dados ao usuário quando ele
+clica no botão. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax - function</title>
+</head>
+<body>
+
+    <div style = "text-align:center;">
+        <button onclick="read()" style = "background-color:blue; color: #FFFF;"> 
+            Ler informações 
+        </button>
+    </div>
+    <div id="content"></div>
+
+    <hr>
+
+    <div style = "text-align:center;">
+    <input type="number" id="txtnumber">
+    <button onclick="generate()" style = "background-color:blue; color: #FFFF;">
+        Gerar números
+    </button>
+    </div>
+
+    <div id="div_number"></div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

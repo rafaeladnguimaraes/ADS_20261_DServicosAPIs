@@ -9,7 +9,7 @@ function validar(){
     }else if(valor < 1 || valor > 10){
         divResult.innerHTML = "O valor não é permitido"
     }else{
-        divResult.innerHTML = "Valor permitido"
+        divResult.innerHTML = "Valor permitido!"
     }
 }
 
@@ -19,7 +19,7 @@ function limpar(){
 
 $("#divJquery").css("background", "#000")
 $("#divJquery").css("color", "white")
-$("#divJquery").html("AAAA <hr> AAAAAAAAA")
+$("#divJquery").html("AAAAAA <hr> AAAAAAAAA")
 
 
 $("#botao").on("click", function(){

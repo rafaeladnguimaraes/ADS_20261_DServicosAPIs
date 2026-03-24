@@ -4,7 +4,7 @@ var pessoa = {
     idade: 19,
     altura: 1.75,
     concluido: [2024, 2024, 2027],
-    instituicoes: ["EEELL", "IC", "US" ],
+    instituicoes: ["EELL", "IC", "US" ],
     conjuge: {
         nome: "Daniel Magnus",
         idade: 19
