@@ -1,0 +1,10 @@
+{
+    "nome":"Rafa" , "idade": 19 , "altura": 1.70 , 
+    "formacoes": ["Ensino Técnico", "Graduação"],
+    "casado": true , "conjuge": {"nome":"Daniel" , "idade": 19},
+    "filhos": [
+        {"nome":"Banguela" , "idade": 1},
+        {"nome":"Piolho" , "idade": 1}
+    ],
+    "endereco": null
+}
