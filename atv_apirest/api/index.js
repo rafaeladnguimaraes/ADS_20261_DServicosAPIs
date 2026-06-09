@@ -19,23 +19,17 @@ const conn = knex({
     }
 });
 
-
 api.get("/", (req, res, next) => {
     res.json({ resposta: "API - Atividade 1" });
 });
 
-/* ==========================================
-   ROTAS DE CATEGORIAS
-   ========================================== */
-
-// Listar todas as categorias
+//categoria
 api.get("/categorias", (req, res, next) => {
     conn("categorias")
         .then(dados => res.json(dados))
         .catch(next);
 });
 
-// Buscar uma categoria por ID
 api.get("/categorias/:id", (req, res, next) => {
     const { id } = req.params;
     conn("categorias")
@@ -48,8 +42,7 @@ api.get("/categorias/:id", (req, res, next) => {
         .catch(next);
 });
 
-// Criar nova categoria (Recurso Admin)
-api.post("/categorias", (req, res, next) => {
+api.post("/adm/categorias", (req, res, next) => {
     conn("categorias")
         .insert(req.body)
         .then(dados => {
@@ -58,8 +51,7 @@ api.post("/categorias", (req, res, next) => {
         .catch(next);
 });
 
-// Atualizar categoria (Recurso Admin)
-api.put("/categorias/:id", (req, res, next) => {
+api.put("/adm/categorias/:id", (req, res, next) => {
     const { id } = req.params;
     conn("categorias")
         .where("id", id)
@@ -71,8 +63,7 @@ api.put("/categorias/:id", (req, res, next) => {
         .catch(next);
 });
 
-// Excluir categoria (Recurso Admin)
-api.delete("/categorias/:id", (req, res, next) => {
+api.delete("/adm/categorias/:id", (req, res, next) => {
     const { id } = req.params;
     conn("categorias")
         .where("id", id)
@@ -84,12 +75,7 @@ api.delete("/categorias/:id", (req, res, next) => {
         .catch(next);
 });
 
-
-/* ==========================================
-   ROTAS DE PRODUTOS
-   ========================================== */
-
-// Listar produtos com o nome da sua respectiva categoria (Join)
+// produtos
 api.get("/produtos", (req, res, next) => {
     conn("produtos")
         .leftJoin("categorias", "produtos.categoria_id", "=", "categorias.id")
@@ -98,7 +84,6 @@ api.get("/produtos", (req, res, next) => {
         .catch(next);
 });
 
-// Buscar um produto específico por ID
 api.get("/produtos/:id", (req, res, next) => {
     const { id } = req.params;
     conn("produtos")
@@ -113,8 +98,7 @@ api.get("/produtos/:id", (req, res, next) => {
         .catch(next);
 });
 
-// Criar novo produto (Recurso Admin)
-api.post("/produtos", (req, res, next) => {
+api.post("/adm/produtos", (req, res, next) => {
     conn("produtos")
         .insert(req.body)
         .then(dados => {
@@ -123,8 +107,7 @@ api.post("/produtos", (req, res, next) => {
         .catch(next);
 });
 
-// Atualizar produto (Recurso Admin)
-api.put("/produtos/:id", (req, res, next) => {
+api.put("/adm/produtos/:id", (req, res, next) => {
     const { id } = req.params;
     conn("produtos")
         .where("id", id)
@@ -136,8 +119,7 @@ api.put("/produtos/:id", (req, res, next) => {
         .catch(next);
 });
 
-// Excluir produto (Recurso Admin)
-api.delete("/produtos/:id", (req, res, next) => {
+api.delete("/adm/produtos/:id", (req, res, next) => {
     const { id } = req.params;
     conn("produtos")
         .where("id", id)
@@ -149,12 +131,7 @@ api.delete("/produtos/:id", (req, res, next) => {
         .catch(next);
 });
 
-
-/* ==========================================
-   ROTAS DE CLIENTES
-   ========================================== */
-
-// Cadastro de Clientes
+//clientes
 api.post("/clientes", (req, res, next) => {
     conn("clientes")
         .insert(req.body)
@@ -164,32 +141,24 @@ api.post("/clientes", (req, res, next) => {
         .catch(next);
 });
 
-
-/* ==========================================
-   ROTAS DE PEDIDOS (Transação Relacionamento N:M)
-   ========================================== */
-
-// Realização de um Pedido (Insere na tabela 'pedidos' e os itens em 'pedidos_produtos')
+// pedidos
 api.post("/pedidos", (req, res, next) => {
     const { endereco, cliente_id, produtos } = req.body; 
-    // 'produtos' deve ser um array de objetos: [{ produto_id: 1, preco: 10.5, quantidade: 2 }]
 
     if (!produtos || produtos.length === 0) {
         return next(http_errors(400, "O pedido precisa conter pelo menos um produto."));
     }
 
-    // Utiliza transação (trx) para garantir que se um insert falhar, nada seja salvo
     conn.transaction(trx => {
         return trx("pedidos")
             .insert({
-                horario: new Date(), // Gera o DATETIME atual do servidor
+                horario: new Date(),
                 endereco: endereco,
                 cliente_id: cliente_id
             })
             .then(pedidoIds => {
                 const pedido_id = pedidoIds[0];
 
-                // Mapeia os produtos vindos da requisição para incluir o ID do pedido gerado
                 const itensPedido = produtos.map(item => ({
                     pedido_id: pedido_id,
                     produto_id: item.produto_id,
@@ -197,7 +166,6 @@ api.post("/pedidos", (req, res, next) => {
                     quantidade: item.quantidade
                 }));
 
-                // Insere em lote na tabela pivot/intermediária
                 return trx("pedidos_produtos").insert(itensPedido);
             });
     })
@@ -207,8 +175,7 @@ api.post("/pedidos", (req, res, next) => {
     .catch(next);
 });
 
-// Consulta de todos os pedidos realizados (Visão Geral Admin)
-api.get("/pedidos", (req, res, next) => {
+api.get("/adm/pedidos", (req, res, next) => {
     conn("pedidos")
         .leftJoin("clientes", "pedidos.cliente_id", "=", "clientes.id")
         .select("pedidos.*", "clientes.nome AS nome_cliente")
@@ -216,7 +183,6 @@ api.get("/pedidos", (req, res, next) => {
         .catch(next);
 });
 
-// Consulta dos itens de um pedido específico
 api.get("/pedidos/:id/itens", (req, res, next) => {
     const { id } = req.params;
     conn("pedidos_produtos")
@@ -227,10 +193,6 @@ api.get("/pedidos/:id/itens", (req, res, next) => {
         .catch(next);
 });
 
-
-/* ==========================================
-   MIDDLEWARE TRATAMENTO DE ERROS (Obrigatório)
-   ========================================== */
 api.use((err, req, res, next) => {
     const status = err.status || 500;
     res.status(status).json({
@@ -239,7 +201,6 @@ api.use((err, req, res, next) => {
     });
 });
 
-// Inicialização do servidor
 api.listen(PORT, () => {
     console.log(`Servidor rodando em: http://${HOSTNAME}:${PORT}`);
 });
